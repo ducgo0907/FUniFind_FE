@@ -1,0 +1,25 @@
+/* NewsFeed.css */
+
+/* Style the news feed container */
+.news-feed {
+	margin-top: 20px;
+}
+
+/* Style the user info container */
+.user-info {
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+/* Style the circular user avatar */
+.user-avatar {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.post {
+	margin-bottom: 20px;
+}
