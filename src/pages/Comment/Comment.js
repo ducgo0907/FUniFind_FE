@@ -6,15 +6,16 @@ import commentService from '../../services/comment.service';
 const Comment = ({ comment, socket, goToProfile }) => {
 
 	const deleteComment = () => {
-		commentService.deletePost(comment._id)
-			.then(response => {
-				const commentDelete = response.data.data;
-				console.log("a", { commentId: commentDelete._id, postId: commentDelete.post});
-				socket.emit("deleteComment", { commentId: commentDelete._id, postId: commentDelete.post});
-			})
-			.catch(error => {
-				console.log(error);
-			})
+		if (window.confirm("Are you sure to delete comment?")) {
+			commentService.deletePost(comment._id)
+				.then(response => {
+					const commentDelete = response.data.data;
+					socket.emit("deleteComment", { commentId: commentDelete._id, postId: commentDelete.post });
+				})
+				.catch(error => {
+					console.log(error);
+				})
+		}
 	}
 	return (
 		<div className="comment">

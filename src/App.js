@@ -8,6 +8,9 @@ import RegistrationForm from './pages/Register/Register';
 import AuthService from './services/auth.service';
 import Profile from './pages/Profile/Profile';
 import NotFound from './pages/NotFound/NotFound';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import AdminDashboard from './pages/Admin/DashBoard';
 
 
 function App() {
@@ -48,6 +51,7 @@ function App() {
 						<Route path="/login" element={<LoginForm />} />
 						<Route path="/register" element={<RegistrationForm />} />
 						<Route path='/:id' element={<Profile />} />
+						<Route path='/admin' element={<AdminDashboard user={user} />}/>
 						<Route path='*' element={<NotFound />} />
 					</Routes>
 				</main>
@@ -56,6 +60,7 @@ function App() {
 						&copy; {new Date().getFullYear()} FUniFind.
 					</div>
 				</footer>
+				<ToastContainer />
 			</div>
 		</Router>
 	);

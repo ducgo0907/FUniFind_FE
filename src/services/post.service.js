@@ -25,6 +25,18 @@ class PostService {
 			},
 		})
 	}
+
+	getListPostPending() {
+		return axios.get(API_URL + 'listApprove', {
+			headers: authHeader()
+		})
+	}
+
+	approve({ isApprove, postID }) {
+		return axios.post(API_URL + 'approve', { isApprove, postID }, {
+			headers: authHeader()
+		})
+	}
 }
 
 export default new PostService();

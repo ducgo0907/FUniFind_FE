@@ -7,6 +7,8 @@ import CommentForm from '../Comment/CommentForm';
 import commentService from '../../services/comment.service';
 import socketIOClient from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import PostActionButton from './PostActionButton';
 
 const host = 'http://localhost:8080';
 
@@ -61,15 +63,26 @@ const NewsFeed = ({ user }) => {
 		}
 	}, [socket])
 
+	const handleShowToast = (message) => {
+		toast.success(message, {
+			position: "bottom-right",
+			autoClose: 5000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+			theme: "colored",
+		});
+	};
+
 	const handlePostSubmit = async (e) => {
 		e.preventDefault();
 		const newPost = e.target.post.value; // Get the new post text from the form
 		if (newPost) {
 			postService.createPost(newPost)
 				.then(response => {
-					console.log(response);
-					// Add the new post to the list of posts
-					setPosts([...posts, response.data]);
+					handleShowToast("Post created successfully! Waiting for admin approve.")
 					e.target.reset(); // Clear the form
 				})
 				.catch(error => {
@@ -151,6 +164,7 @@ const NewsFeed = ({ user }) => {
 							</div>
 						</div>
 						<p>{post.content}</p>
+						<PostActionButton />
 						<div className='comments'>
 							<div>Comment: </div>
 							{post.comments.map((comment, commentIndex) => (
