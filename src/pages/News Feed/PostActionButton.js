@@ -87,8 +87,8 @@ const PostActionButton = ({ post, user }) => {
 			post.interactions.forEach((interaction) => {
 				if (interaction.user._id === user.id) {
 					setLiked(true);
+					setContentInteract(interaction.type);
 				}
-				setContentInteract(interaction.type);
 				switch (interaction.type) {
 					case INTERACTION_TYPES.LIKE:
 						like++;
@@ -132,7 +132,7 @@ const PostActionButton = ({ post, user }) => {
 				{interaction.like} people like, {interaction.haha} people haha, {interaction.dislike} people dislike
 			</div>
 			<button
-				className={`post-action-button btn btn-primary ${isHoveredButton ? 'hovered' : ''} ${contentInteract}`}
+				className={`post-action-button btn btn-primary ${isHoveredButton ? 'hovered' : ''} ${liked ? contentInteract : ''}`}
 				onClick={() => interactionPost(contentInteract)}
 				onMouseEnter={handleButtonMouseEnter}
 				onMouseLeave={handleButtonMouseLeave}
