@@ -5,20 +5,61 @@ import './NewsFeed.css'
 import Comment from '../Comment/Comment';
 import CommentForm from '../Comment/CommentForm';
 import commentService from '../../services/comment.service';
+import socketIOClient from 'socket.io-client';
+import { useNavigate } from 'react-router-dom';
+
+const host = 'http://localhost:8080';
 
 const NewsFeed = ({ user }) => {
 	const [posts, setPosts] = useState([]); // Store the list of posts
+	const [socket, setSocket] = useState(null);
+	const nav = useNavigate();
 
 	useEffect(() => {
+		const newSocket = socketIOClient.connect(host);
+		setSocket(newSocket);
+
 		postService.getAllPost()
 			.then(response => {
-				console.log(response.data);
 				setPosts(response.data);
 			})
 			.catch(error => {
 				console.log(error);
 			})
+
+		return () => {
+			newSocket.disconnect();
+		}
 	}, [])
+
+	useEffect(() => {
+		// Listen for events when the socket is available
+		if (socket) {
+			socket.on('getComment', response => {
+				if (response.data) {
+					setPosts(listPost => listPost.map(post => {
+						if (post._id === response.data.post) {
+							const isExisted = post.comments.find(comment => comment._id === response.data._id);
+							if (!isExisted)
+								post.comments.push(response.data);
+						}
+						return post;
+					}))
+				}
+			});
+
+			socket.on('deletedComment', data => {
+				if (data) {
+					setPosts(listPost => listPost.map(post => {
+						if (post._id === data.postId) {
+							post.comments = post.comments.filter(comment => comment._id !== data.commentId)
+						}
+						return post;
+					}))
+				}
+			})
+		}
+	}, [socket])
 
 	const handlePostSubmit = async (e) => {
 		e.preventDefault();
@@ -53,13 +94,7 @@ const NewsFeed = ({ user }) => {
 		try {
 			commentService.createComment({ postID, content })
 				.then(response => {
-					console.log(response.data);
-					setPosts(listPost => listPost.map(post => {
-						if (post._id === postID) {
-							post.comments.push(response.data)
-						}
-						return post;
-					}))
+					socket.emit('sendComment', response.data);
 				})
 				.catch(err => {
 					console.log(err);
@@ -68,6 +103,10 @@ const NewsFeed = ({ user }) => {
 			console.error(error);
 		}
 	};
+
+	const goToProfile = (id) => {
+		nav(`/${id}`);
+	}
 
 	return (
 		<div>
@@ -98,6 +137,7 @@ const NewsFeed = ({ user }) => {
 											src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" // Assuming 'avatar' is the URL of the profile picture
 											alt="User Avatar"
 											className="user-avatar"
+											onClick={() => goToProfile(post.user._id)}
 										/>
 									</div>
 									<div className='col-sm-9'>
@@ -115,7 +155,7 @@ const NewsFeed = ({ user }) => {
 							<div>Comment: </div>
 							{post.comments.map((comment, commentIndex) => (
 								<div key={commentIndex} className="comment">
-									<Comment comment={comment} />
+									<Comment comment={comment} socket={socket} goToProfile={goToProfile} />
 								</div>
 							))}
 						</div>

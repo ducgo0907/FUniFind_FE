@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import socketIOClient from 'socket.io-client'
-import LoginForm from './pages/login/Login';
+import LoginForm from './pages/Login/Login';
 import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Home from './pages/Home/Home';
-import RegistrationForm from './pages/register/Register';
+import RegistrationForm from './pages/Register/Register';
 import AuthService from './services/auth.service';
+import Profile from './pages/Profile/Profile';
+import NotFound from './pages/NotFound/NotFound';
 
-const host = 'http://localhost:8080/'
 
 function App() {
-	// const [socket, setSocket] = useState(null);
 	const [user, setUser] = useState(AuthService.getCurrentUser());
 	const [isLogged, setIsLogged] = useState(false);
 
@@ -20,23 +19,7 @@ function App() {
 		if (user && user !== null) {
 			setIsLogged(true);
 		}
-
-
-		// const newSocket = socketIOClient.connect(host);
-		// setSocket(newSocket);
-		// return () => {
-		// 	newSocket.disconnect();
-		// }
-	}, [])
-
-	// useEffect(() => {
-	// 	// Listen for events when the socket is available
-	// 	if (socket) {
-	// 		socket.on('testSocket', data => {
-	// 			console.log(data, "hihi");
-	// 		});
-	// 	}
-	// }, [socket])
+	}, [user])
 
 	const logOut = () => {
 		AuthService.logout();
@@ -64,6 +47,8 @@ function App() {
 						<Route path="/" element={<Home user={user} />} />
 						<Route path="/login" element={<LoginForm />} />
 						<Route path="/register" element={<RegistrationForm />} />
+						<Route path='/:id' element={<Profile />} />
+						<Route path='*' element={<NotFound />} />
 					</Routes>
 				</main>
 				<footer className="bg-dark text-light py-3 sticky-footer">

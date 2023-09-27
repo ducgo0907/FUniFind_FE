@@ -13,6 +13,15 @@ class CommentService {
 			return erorr;
 		}
 	}
+
+	deletePost(commentID) {
+		return axios.delete(API_URL + 'delete', {
+			headers: authHeader(),
+			params: {
+				commentID
+			},
+		})
+	}
 }
 
 export default new CommentService();
