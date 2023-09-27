@@ -164,7 +164,7 @@ const NewsFeed = ({ user }) => {
 							</div>
 						</div>
 						<p>{post.content}</p>
-						<PostActionButton />
+						<PostActionButton post={post} user={user} />
 						<div className='comments'>
 							<div>Comment: </div>
 							{post.comments.map((comment, commentIndex) => (

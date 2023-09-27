@@ -1,9 +1,9 @@
 /* Add this CSS to your stylesheet */
 .post-action-container {
 	position: relative;
-  }
-  
-  .post-action-button {
+}
+
+.post-action-button {
 	background-color: transparent;
 	border: solid 1px black;
 	cursor: pointer;
@@ -11,20 +11,23 @@
 	padding: 8px;
 	transition: background-color 0.3s ease-in-out;
 	color: black;
-  }
-  
-  /* Style for the sticky container */
-  .post-action-container.hovered {
+}
+
+/* Style for the sticky container */
+.post-action-container.hovered {
 	position: sticky;
 	top: 0;
-	display: flex; /* Ensure the button and icons are in a row */
-	align-items: center; /* Center the button vertically */
-	background-color: white; /* Customize the background color */
+	display: flex;
+	/* Ensure the button and icons are in a row */
+	align-items: center;
+	/* Center the button vertically */
+	background-color: white;
+	/* Customize the background color */
 	z-index: 1;
 	color: #000;
-  }
-  
-  .post-action-icons {
+}
+
+.post-action-icons {
 	display: flex;
 	gap: 8px;
 	border: 1px solid #ccc;
@@ -33,9 +36,26 @@
 	opacity: 1;
 	transition: opacity 0.3s ease-in-out;
 	color: #000;
-  }
-  
-  .post-action-container.hovered:hover .post-action-icons {
+}
+
+.post-action-container.hovered:hover .post-action-icons {
 	opacity: 1;
-  }
-  
+}
+
+.LIKE {
+	color: var(--bs-btn-hover-color);
+	background-color: var(--bs-btn-hover-bg);
+	border-color: var(--bs-btn-hover-border-color);
+}
+
+.HAHA {
+    color: #fff;
+    background-color: #198754;
+    border-color: #198754;;
+}
+
+.DISLIKE {
+	color: #000;
+    background-color: #ffca2c;
+    border-color: #ffc720;
+}
