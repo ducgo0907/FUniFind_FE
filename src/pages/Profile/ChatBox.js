@@ -1,7 +1,8 @@
 // ChatBox.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ChatBox.css'
-const ChatBox = ({ isOpen, onClose, userProfile }) => {
+
+const ChatBox = ({ isOpen, onClose, userProfile, user, socket }) => {
 	const [messages, setMessages] = useState([]);
 	const [newMessage, setNewMessage] = useState('');
 
@@ -11,10 +12,31 @@ const ChatBox = ({ isOpen, onClose, userProfile }) => {
 
 	const handleSendMessage = () => {
 		if (newMessage.trim() !== '') {
-			setMessages([...messages, { text: newMessage }]);
+			const message = {
+				message: newMessage,
+				sender: user.email,
+				receiver: userProfile.email,
+				userName: user.name
+			}
+			socket.emit('privateMessage', message);
+			setMessages(listMessage => [...listMessage, message]);
 			setNewMessage('');
 		}
 	};
+
+	useEffect(() => {
+		// Listen for events when the socket is available
+		if (socket) {
+			// Người dùng nhận message từ user khác
+			// data : { sender: thông tin người người, message: Nội dung tin nhắn }
+			socket.on('privateMessage', data => {
+				if (data) {
+					setMessages(listMessage => [...listMessage, data]);
+				}
+			})
+		}
+	}, [socket])
+
 
 	return (
 		<div className={`chat-box ${isOpen ? 'open' : 'hide'}`}>
@@ -27,8 +49,8 @@ const ChatBox = ({ isOpen, onClose, userProfile }) => {
 			<div className="chat-body">
 				<div className="chat-messages">
 					{messages.map((message, index) => (
-						<div key={index} className="message">
-							{message.text}
+						<div key={index} className={`message ${message.sender === user.email ? 'you' : 'other-user'}`}>
+							{message.message}
 						</div>
 					))}
 				</div>

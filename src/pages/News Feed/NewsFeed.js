@@ -5,22 +5,15 @@ import './NewsFeed.css'
 import Comment from '../Comment/Comment';
 import CommentForm from '../Comment/CommentForm';
 import commentService from '../../services/comment.service';
-import socketIOClient from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import PostActionButton from './PostActionButton';
 
-const host = 'http://localhost:8080';
-
-const NewsFeed = ({ user }) => {
+const NewsFeed = ({ user, socket }) => {
 	const [posts, setPosts] = useState([]); // Store the list of posts
-	const [socket, setSocket] = useState(null);
 	const nav = useNavigate();
 
 	useEffect(() => {
-		const newSocket = socketIOClient.connect(host);
-		setSocket(newSocket);
-
 		postService.getAllPost()
 			.then(response => {
 				setPosts(response.data);
@@ -28,10 +21,6 @@ const NewsFeed = ({ user }) => {
 			.catch(error => {
 				console.log(error);
 			})
-
-		return () => {
-			newSocket.disconnect();
-		}
 	}, [])
 
 	useEffect(() => {

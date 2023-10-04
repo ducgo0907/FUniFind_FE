@@ -39,3 +39,11 @@
 	border: 1px solid black;
   }
   
+  .you{
+	display: flex;
+	justify-content: end;
+  }
+
+  .other-user{
+	display: flex;
+  }

@@ -105,7 +105,7 @@ const PostActionButton = ({ post, user }) => {
 			});
 			setInteraction({ like, dislike, haha });
 		}
-	}, [post.interactions, user]);
+	}, [post.interactions, contentInteract]);
 
 	const renderButton = () => {
 		switch (contentInteract) {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import NewsFeed from '../News Feed/NewsFeed';
 import { Link } from 'react-router-dom';
 
-const Home = ({ user }) => {
+const Home = ({ user, socket }) => {
 	const [admin, setAdmin] = useState(false);
 
 	useEffect(() => {
@@ -15,7 +15,7 @@ const Home = ({ user }) => {
 			<p>{user && "Welcome, " + user.name}</p>
 			{admin ? (<Link className='btn btn-success' to='/admin'>Go to dashboard</Link>) : (<div></div>)}
 
-			<NewsFeed user={user} />
+			<NewsFeed user={user} socket={socket} />
 		</div>
 	);
 };

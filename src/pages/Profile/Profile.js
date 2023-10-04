@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import userService from '../../services/user.service';
 import ChatBox from './ChatBox';
+import './Profile.css';
 
-const Profile = () => {
+const Profile = ({ currentUser, socket }) => {
 	const { id } = useParams();
 	const [user, setUser] = useState({});
 	const [isChatOpen, setChatOpen] = useState(false);
@@ -30,10 +31,10 @@ const Profile = () => {
 			<img src={user.avatar} alt={user.name} />
 			<h2>{user.name}</h2>
 			<p>{user.email}</p>
-			<button onClick={toggleChat} className="message-button">
+			<button onClick={toggleChat} className={`message-button ${currentUser && currentUser.id === user._id ? 'hide' : ''}`}>
 				Message
 			</button>
-			<ChatBox isOpen={isChatOpen} onClose={toggleChat} userProfile={user} />
+			<ChatBox isOpen={isChatOpen} user={currentUser} onClose={toggleChat} userProfile={user} socket={socket} />
 		</div>
 	);
 };
