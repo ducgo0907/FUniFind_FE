@@ -31,7 +31,7 @@ function App() {
 		const newSocket = socketIOClient.connect(host);
 		setSocket(newSocket);
 
-		newSocket.emit('storeUserId', user.email);
+		newSocket.emit('storeUserId', user?.email);
 
 		return () => {
 			newSocket.disconnect();

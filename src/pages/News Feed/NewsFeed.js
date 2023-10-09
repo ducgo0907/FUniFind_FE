@@ -8,10 +8,13 @@ import commentService from '../../services/comment.service';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import PostActionButton from './PostActionButton';
+import UploadImage from '../Upload/Upload';
 
 const NewsFeed = ({ user, socket }) => {
 	const [posts, setPosts] = useState([]); // Store the list of posts
 	const nav = useNavigate();
+
+	console.log(posts);
 
 	useEffect(() => {
 		postService.getAllPost()
@@ -113,20 +116,7 @@ const NewsFeed = ({ user, socket }) => {
 	return (
 		<div>
 			<h1>News Feed</h1>
-			{user && <form onSubmit={handlePostSubmit}>
-				<div className="form-group">
-					<textarea
-						name="post"
-						className="form-control"
-						placeholder="What's on your mind?"
-						rows="3"
-						required
-					></textarea>
-				</div>
-				<button type="submit" className="btn btn-primary">
-					Post
-				</button>
-			</form>}
+			<UploadImage user={user} />
 			<hr />
 			<div className="news-feed">
 				{posts.map((post, index) => (
@@ -145,11 +135,18 @@ const NewsFeed = ({ user, socket }) => {
 									<div className='col-sm-9'>
 										<small className='row'>{post.user.name}</small>
 										<small className='row'>{timestampConverter(post.createdAt)}</small>
+
 									</div>
 									<div className='col-sm-1' onClick={() => deletePost(post._id)}>
 										x
 									</div>
+
 								</div>
+							</div>
+							<div className='row'>
+								{post.images.map(image => (<div className='col-sm-4'>
+									<img src={image.url} alt='' height="150px" width="150px" />
+								</div>))}
 							</div>
 						</div>
 						<p>{post.content}</p>
