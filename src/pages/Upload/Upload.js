@@ -14,7 +14,9 @@ function UploadImage({ user }) {
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
 			const imageData = await readFileHandler(file);
-			imagesData.push(imageData);
+			if(imageData != undefined){
+				imagesData.push(imageData);
+			}
 
 			if (file.type.startsWith('image/')) {
 				previewImagesArray.push(URL.createObjectURL(file));
@@ -59,6 +61,7 @@ function UploadImage({ user }) {
 				setPriviewImages([]);
 			}
 			console.log(data);
+			console.log(formData, imagesState);
 		} catch (e) {
 			console.log(e);
 			setMessage("Error! Could not upload");
